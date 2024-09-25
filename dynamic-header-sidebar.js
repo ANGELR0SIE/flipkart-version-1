@@ -126,12 +126,13 @@ function createSubNav() {
   
   
 
+
+
 function createLeftSidebar() {
   const leftSidebar = document.createElement("div");
   leftSidebar.className = "left-sidebar";
   const bodySection = document.querySelector(".body-section");
 
-  // Access categories from the first element of the leftSidebar array
   const categoriesData = flipkartData.leftSidebar[0].categories;
 
   const filterHeader = document.createElement("div");
@@ -140,10 +141,9 @@ function createLeftSidebar() {
   filterHeaderText.innerText = categoriesData.head;
   filterHeader.appendChild(filterHeaderText);
 
-  // Create the hidden div inside filter-header
   const removeItemsDivHeader = document.createElement("div");
-  removeItemsDivHeader.className = "remove-items sec2-remove-items"; // You can change the class as needed
-  removeItemsDivHeader.style.display = "none"; // Initially hidden
+  removeItemsDivHeader.className = "remove-items sec2-remove-items";
+  removeItemsDivHeader.style.display = "none";
 
   const clearIconHeader = document.createElement("span");
   clearIconHeader.className = "icon";
@@ -154,121 +154,77 @@ function createLeftSidebar() {
   clearTextHeader.innerText = "Clear all"; // Clear all text
 
   const listOfFilters = document.createElement("div");
-  listOfFilters.className = "list-of-filter"; // Class for the list of filters
+  listOfFilters.className = "list-of-filter";
 
-  // Example: Append more items to the list of filters
-  const filterItem1 = document.createElement("div");
-  filterItem1.innerText = "Filter Item 1";
-  listOfFilters.appendChild(filterItem1);
-
-  const filterItem2 = document.createElement("div");
-  filterItem2.innerText = "Filter Item 2";
-  listOfFilters.appendChild(filterItem2);
-
-  // Add the list of filters to the remove items div
   removeItemsDivHeader.appendChild(clearIconHeader);
   removeItemsDivHeader.appendChild(clearTextHeader);
-  removeItemsDivHeader.appendChild(listOfFilters); // Append the list of filters to the header's remove items div
-
-  filterHeader.appendChild(removeItemsDivHeader); // Append the hidden div to the filter header
-
-  const categorySubHeader = document.createElement("div");
-  categorySubHeader.className = "category-sub-header";
-  const categorySubHeaderText = document.createElement("span");
-  categorySubHeaderText.innerText = categoriesData.subHeader;
-  categorySubHeader.appendChild(categorySubHeaderText);
-
-  const grayText = document.createElement("div");
-  grayText.className = "gray-text";
-  grayText.innerText = categoriesData.grayText;
-
-  const blackText = document.createElement("div");
-  blackText.className = "black-text";
-  blackText.innerText = categoriesData.blackText;
-
-  const downArrowImg = document.createElement("img");
-  downArrowImg.src = categoriesData.icon;
-  blackText.appendChild(downArrowImg);
+  filterHeader.appendChild(removeItemsDivHeader);
 
   leftSidebar.appendChild(filterHeader);
-  leftSidebar.appendChild(categorySubHeader);
-  leftSidebar.appendChild(grayText);
-  leftSidebar.appendChild(blackText);
 
-  // Creating sections
   flipkartData.leftSidebar[0].sections.forEach((section, index) => {
-      const sectionDiv = document.createElement("section");
-      sectionDiv.className = `filter-section ${section.title.replace(/\s+/g, '-').toLowerCase()}`; // Add title as class name
+    const sectionDiv = document.createElement("section");
+    sectionDiv.className = `filter-section ${section.title.replace(/\s+/g, '-').toLowerCase()}`;
 
-      const sectionTitle = document.createElement("div");
-      sectionTitle.className = "section-title";
-      sectionTitle.innerText = section.title;
-      sectionDiv.appendChild(sectionTitle);
+    const sectionTitle = document.createElement("div");
+    sectionTitle.className = "section-title";
+    sectionTitle.innerText = section.title;
+    sectionDiv.appendChild(sectionTitle);
 
-      // Create and append the hidden div for clearing
-      const removeItemsDiv = document.createElement("div");
-      removeItemsDiv.className = `remove-items ${index === 0 ? 'sec2-remove-items' : section.title.replace(/\s+/g, '-').toLowerCase() + '-remove-items'}`; // Class for section 2, 3, etc.
-      removeItemsDiv.style.display = "none"; // Initially hidden
+    const removeItemsDiv = document.createElement("div");
+    removeItemsDiv.className = `remove-items ${section.title.replace(/\s+/g, '-').toLowerCase() + '-remove-items'}`;
+    removeItemsDiv.style.display = "none";
 
-      const clearIcon = document.createElement("span");
-      clearIcon.className = "icon";
-      clearIcon.innerText = "✕"; // Clear icon
-      
-      const clearText = document.createElement("span");
-      clearText.className = "text";
-      clearText.innerText = "Clear all"; // Clear all text
-      
-      removeItemsDiv.appendChild(clearIcon);
-      removeItemsDiv.appendChild(clearText);
-      sectionDiv.appendChild(removeItemsDiv); // Append hidden div to section
+    const clearIcon = document.createElement("span");
+    clearIcon.className = "icon";
+    clearIcon.innerText = "✕"; // Clear icon
 
-      if (section.min && section.max) {
-          const priceFilter = document.createElement("div");
-          priceFilter.className = "price-filter";
+    const clearText = document.createElement("span");
+    clearText.className = "text";
+    clearText.innerText = "Clear all"; // Clear all text
 
-          const minSelect = document.createElement("select");
-          section.min.forEach((minValue) => {
-              const option = document.createElement("option");
-              option.value = minValue;
-              option.text = minValue;
-              minSelect.appendChild(option);
-          });
-          priceFilter.appendChild(minSelect);
+    removeItemsDiv.appendChild(clearIcon);
+    removeItemsDiv.appendChild(clearText);
+    sectionDiv.appendChild(removeItemsDiv);
 
-          const maxSelect = document.createElement("select");
-          section.max.forEach((maxValue) => {
-              const option = document.createElement("option");
-              option.value = maxValue;
-              option.text = maxValue;
-              maxSelect.appendChild(option);
-          });
-          priceFilter.appendChild(maxSelect);
-          sectionDiv.appendChild(priceFilter);
-      }
+    if (section.options) {
+      const checkboxList = document.createElement("ul");
+      section.options.forEach((option) => {
+        const listItem = document.createElement("li");
+        listItem.className = "checkbox-item";
 
-      if (section.options) {
-          const checkboxList = document.createElement("ul");
-          section.options.forEach((option) => {
-              const listItem = document.createElement("li");
-              listItem.className = "checkbox-item";
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = option;
 
-              const checkbox = document.createElement("input");
-              checkbox.type = "checkbox";
-              checkbox.value = option;
+        const label = document.createElement("label");
+        label.innerText = option;
 
-              const label = document.createElement("label");
-              label.innerText = option;
+        listItem.appendChild(checkbox);
+        listItem.appendChild(label);
+        checkboxList.appendChild(listItem);
 
-              listItem.appendChild(checkbox);
-              listItem.appendChild(label);
-              checkboxList.appendChild(listItem);
-          });
-          sectionDiv.appendChild(checkboxList);
-      }
-      leftSidebar.appendChild(sectionDiv);
+        // Show "Clear All" when any checkbox is checked
+        checkbox.addEventListener('change', () => {
+          const anyChecked = [...checkboxList.querySelectorAll('input[type="checkbox"]')].some(cb => cb.checked);
+          removeItemsDiv.style.display = anyChecked ? 'block' : 'none';
+        });
+      });
+      sectionDiv.appendChild(checkboxList);
+    }
+
+    // Clear selected checkboxes on "Clear All" click
+    clearIcon.addEventListener('click', () => {
+      const checkboxes = sectionDiv.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(cb => {
+        cb.checked = false; // Uncheck the checkbox
+      });
+      removeItemsDiv.style.display = 'none'; // Hide "Clear All" button
+    });
+
+    leftSidebar.appendChild(sectionDiv);
   });
 
-  // Creating the Fassured section
   const fassuredData = flipkartData.leftSidebar[0].fassured;
   const fassuredSection = document.createElement("div");
   fassuredSection.className = "fassured-section";
@@ -282,7 +238,7 @@ function createLeftSidebar() {
   fassuredSection.appendChild(questionMark);
 
   leftSidebar.appendChild(fassuredSection);
-  bodySection.appendChild(leftSidebar); // Moved this line outside the loop
+  bodySection.appendChild(leftSidebar);
 }
 
 
@@ -297,166 +253,6 @@ function createLeftSidebar() {
 
 
 
-// function createLeftSidebar() {
-//     const leftSidebar = document.createElement("div");
-//     leftSidebar.className = "left-sidebar";
-//     const bodySection = document.querySelector(".body-section");
-
-//     // Access categories from the first element of the leftSidebar array
-//     const categoriesData = flipkartData.leftSidebar[0].categories;
-
-//     const filterHeader = document.createElement("div");
-//     filterHeader.className = "filter-header";
-//     const filterHeaderText = document.createElement("h2");
-//     filterHeaderText.innerText = categoriesData.head;
-//     filterHeader.appendChild(filterHeaderText);
-
-//     // Create the hidden div inside filter-header
-//     const removeItemsDivHeader = document.createElement("div");
-//     removeItemsDivHeader.className = "remove-items sec2-remove-items"; // You can change the class as needed
-//     removeItemsDivHeader.style.display = "none"; // Initially hidden
-
-//     const clearIconHeader = document.createElement("span");
-//     clearIconHeader.className = "icon";
-//     clearIconHeader.innerText = "✕"; // Clear icon
-
-//     const clearTextHeader = document.createElement("span");
-//     clearTextHeader.className = "text";
-//     clearTextHeader.innerText = "Clear all"; // Clear all text
-
-//     const listOfFilters = document.createElement("div");
-//     listOfFilters.className = "list-of-filter"; // Class for the list of filters
-
-//     // Example: Append more items to the list of filters
-//     const filterItem1 = document.createElement("div");
-//     filterItem1.innerText = "Filter Item 1";
-//     listOfFilters.appendChild(filterItem1);
-
-//     const filterItem2 = document.createElement("div");
-//     filterItem2.innerText = "Filter Item 2";
-//     listOfFilters.appendChild(filterItem2);
-
-//     // Add the list of filters to the remove items div
-//     removeItemsDivHeader.appendChild(clearIconHeader);
-//     removeItemsDivHeader.appendChild(clearTextHeader);
-//     removeItemsDivHeader.appendChild(listOfFilters); // Append the list of filters to the header's remove items div
-
-//     filterHeader.appendChild(removeItemsDivHeader); // Append the hidden div to the filter header
-
-//     const categorySubHeader = document.createElement("div");
-//     categorySubHeader.className = "category-sub-header";
-//     const categorySubHeaderText = document.createElement("span");
-//     categorySubHeaderText.innerText = categoriesData.subHeader;
-//     categorySubHeader.appendChild(categorySubHeaderText);
-
-//     const grayText = document.createElement("div");
-//     grayText.className = "gray-text";
-//     grayText.innerText = categoriesData.grayText;
-
-//     const blackText = document.createElement("div");
-//     blackText.className = "black-text";
-//     blackText.innerText = categoriesData.blackText;
-
-//     const downArrowImg = document.createElement("img");
-//     downArrowImg.src = categoriesData.icon;
-//     blackText.appendChild(downArrowImg);
-
-//     leftSidebar.appendChild(filterHeader);
-//     leftSidebar.appendChild(categorySubHeader);
-//     leftSidebar.appendChild(grayText);
-//     leftSidebar.appendChild(blackText);
-
-//     // Creating sections
-//     flipkartData.leftSidebar[0].sections.forEach((section, index) => {
-//         const sectionDiv = document.createElement("section");
-//         sectionDiv.className = `filter-section ${section.title.replace(/\s+/g, '-').toLowerCase()}`; // Add title as class name
-
-//         const sectionTitle = document.createElement("div");
-//         sectionTitle.className = "section-title";
-//         sectionTitle.innerText = section.title;
-//         sectionDiv.appendChild(sectionTitle);
-
-//         // Create and append the hidden div for clearing
-//         const removeItemsDiv = document.createElement("div");
-//         removeItemsDiv.className = `remove-items ${index === 0 ? 'sec2-remove-items' : section.title.replace(/\s+/g, '-').toLowerCase() + '-remove-items'}`; // Class for section 2, 3, etc.
-//         removeItemsDiv.style.display = "none"; // Initially hidden
-
-//         const clearIcon = document.createElement("span");
-//         clearIcon.className = "icon";
-//         clearIcon.innerText = "✕"; // Clear icon
-        
-//         const clearText = document.createElement("span");
-//         clearText.className = "text";
-//         clearText.innerText = "Clear all"; // Clear all text
-        
-//         removeItemsDiv.appendChild(clearIcon);
-//         removeItemsDiv.appendChild(clearText);
-//         sectionDiv.appendChild(removeItemsDiv); // Append hidden div to section
-
-//         if (section.min && section.max) {
-//             const priceFilter = document.createElement("div");
-//             priceFilter.className = "price-filter";
-
-//             const minSelect = document.createElement("select");
-//             section.min.forEach((minValue) => {
-//                 const option = document.createElement("option");
-//                 option.value = minValue;
-//                 option.text = minValue;
-//                 minSelect.appendChild(option);
-//             });
-//             priceFilter.appendChild(minSelect);
-
-//             const maxSelect = document.createElement("select");
-//             section.max.forEach((maxValue) => {
-//                 const option = document.createElement("option");
-//                 option.value = maxValue;
-//                 option.text = maxValue;
-//                 maxSelect.appendChild(option);
-//             });
-//             priceFilter.appendChild(maxSelect);
-//             sectionDiv.appendChild(priceFilter);
-//         }
-
-//         if (section.options) {
-//             const checkboxList = document.createElement("ul");
-//             section.options.forEach((option) => {
-//                 const listItem = document.createElement("li");
-//                 listItem.className = "checkbox-item";
-
-//                 const checkbox = document.createElement("input");
-//                 checkbox.type = "checkbox";
-//                 checkbox.value = option;
-
-//                 const label = document.createElement("label");
-//                 label.innerText = option;
-
-//                 listItem.appendChild(checkbox);
-//                 listItem.appendChild(label);
-//                 checkboxList.appendChild(listItem);
-//             });
-//             sectionDiv.appendChild(checkboxList);
-//         }
-//         leftSidebar.appendChild(sectionDiv);
-//     });
-
-//     // Creating the Fassured section
-//     const fassuredData = flipkartData.leftSidebar[0].fassured;
-//     const fassuredSection = document.createElement("div");
-//     fassuredSection.className = "fassured-section";
-
-//     const fassuredLogo = document.createElement("img");
-//     fassuredLogo.src = fassuredData.logo;
-//     fassuredSection.appendChild(fassuredLogo);
-
-//     const questionMark = document.createElement("span");
-//     questionMark.innerText = fassuredData.question;
-//     fassuredSection.appendChild(questionMark);
-
-//     leftSidebar.appendChild(fassuredSection);
-//     bodySection.appendChild(leftSidebar); // Moved this line outside the loop
-// }
-
-
 
 
   createLeftSidebar();
@@ -465,9 +261,6 @@ function createLeftSidebar() {
 function createRightSidebar() {
   const rightMainbar = document.createElement("div");
   rightMainbar.className = "right";
-  const bodySection = document.querySelector(".body-section");
-  bodySection.appendChild(rightMainbar);
-
   flipkartData.right.div1.forEach((item) => {
     const rightHead = document.createElement("div");
     rightHead.className = "rightHead";
@@ -504,6 +297,11 @@ function createRightSidebar() {
     rightHead.appendChild(filterBar);
     rightMainbar.appendChild(rightHead);
   });
+  const right = document.createElement("div");
+  right.className = "right-sec-main";
+  rightMainbar.appendChild(right);
+  const bodySection = document.querySelector(".body-section");
+  bodySection.appendChild(rightMainbar);
 }
 
 // Call functions to create the structure
