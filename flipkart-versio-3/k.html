@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="left-sidebar">
+        <div class="filter-section brand">
+            <div class="section-title">BRAND</div>
+            <ul>
+                <li class="checkbox-item"><input type="checkbox" value="SAMSUNG"><label>SAMSUNG</label></li>
+                <li class="checkbox-item"><input type="checkbox" value="vivo"><label>vivo</label></li>
+                <li class="checkbox-item"><input type="checkbox" value="OPPO"><label>OPPO</label></li>
+                <li class="checkbox-item"><input type="checkbox" value="realme"><label>realme</label></li>
+                <li class="checkbox-item"><input type="checkbox" value="POCO"><label>POCO</label></li>
+                <li class="checkbox-item"><input type="checkbox" value="MOTOROLA"><label>MOTOROLA</label></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let k = document.querySelectorAll('.filter-section.brand input[type="checkbox"]');
+            console.log(k); // Should output the NodeList of checkboxes
+        });
+    </script>
+</body>
+</html>
