@@ -1,7 +1,7 @@
 import { filterItems } from "./filter.js";
 import { handleSort } from "./sorting.js";
 import { initializePagination } from "./pagination.js";
-import { clearAllFilters } from "./clearAll.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   let phoneData = [];
 
@@ -25,10 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".filter-txt").addEventListener("click", () => {
       handleSort(phoneData);
     });
-    document.querySelector(".remove-items").addEventListener("click", () => {
-      clearAllFilters();
-      filterItems(phoneData);
-    });
   });
 
   let flipkartData;
@@ -41,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       createSubNav();
       createLeftSidebar();
       createRightSidebar();
+      // attachClearAllListeners();
     })
     .catch((error) => console.error("Error loading JSON data:", error));
 
@@ -206,6 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         checkboxes.forEach((cb) => {
           cb.checked = false;
+          filterItems();
         });
         removeItemsDiv.style.display = "none";
       });

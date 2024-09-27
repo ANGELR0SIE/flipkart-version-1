@@ -780,6 +780,8 @@
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    align-items: center;
+    width: 100%;
   }
   
   .pagination button {
@@ -938,4 +940,9 @@ section{
   color: #212121;
   width: calc(100% - 25);
   line-height: 1px;
+}
+
+
+.page-button:active{
+  background-color: #172337;
 }

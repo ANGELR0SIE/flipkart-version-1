@@ -1,6 +1,5 @@
 import { createRightSections } from "./pone-cards.js";
 import { initializePagination } from "./pagination.js";
-import { clearAllFilters } from "./clearAll.js";
 
 let originalData = [];
 let filteredData = [];
@@ -18,29 +17,43 @@ async function loadData() {
     filteredData = originalData;
     attachFilterListeners();
     updateDisplay(filteredData);
-    initializePagination(filteredData, itemsPerPage);
   } catch (error) {
     console.error("Error loading data:", error);
   }
 }
+
+
+const ramConditions = {
+  "4 GB": (ram) => ram === 4,
+  "3 GB": (ram) => ram === 3,
+  "2 GB": (ram) => ram === 2,
+  "1 GB and Below": (ram) => ram <= 1,
+  "8 GB and Above": (ram) => ram >= 8,
+  "6 GB": (ram) => ram === 6,
+  "6 GB Above": (ram) => ram > 6,
+};
 
 function applyFilters(data) {
   const brandFilters = getSelectedBrands();
   const ramFilters = getSelectedRAM();
   const ratings = getSelectedRatings();
 
+
   return data.filter((item) => {
     const brandMatch = brandFilters.length
       ? brandFilters.includes(item.name.split(" ")[0].toUpperCase())
       : true;
-    const ramMatch = ramFilters.length ? ramFilters.includes(item.RAM) : true;
-    // const ratingMatch = ratings.length
-    //   ? ratings.includes(`${item.ratings}★ & above`)
-    //   : true;
+    const ramMatch = ramFilters.length
+    ? ramFilters.some((filter) => {
+        if (item.RAM === "Not Specified") return false;
 
-    const ratingMatch = ratings.length
-    ? ratings.some(rating => parseFloat(item.ratings) >= parseFloat(rating)) // Compare numbers
+        const itemRAM = parseInt(item.RAM); 
+        return ramConditions[filter] ? ramConditions[filter](itemRAM) : false;
+      })
     : true;
+    const ratingMatch = ratings.length
+      ? ratings.some((rating) => parseFloat(item.ratings) >= parseFloat(rating))
+      : true;
 
     return brandMatch && ramMatch && ratingMatch;
   });
@@ -79,12 +92,20 @@ function getSelectedRAM() {
 }
 
 function updateDisplay(data) {
+  const rightSection = document.querySelector(".right-sec");
+  const paginationContainer = document.querySelector(".pagination");
+  
   if (data.length === 0) {
-    const rightSection = document.querySelector(".right-sec");
     rightSection.innerHTML = "<div>No results found</div>";
+    paginationContainer.style.display = "none";
     return;
+  } else {
+    paginationContainer.style.display = "block";
   }
-
+  
+  currentPage = 1;
+  console.log(currentPage);
+  
   const paginatedData = paginate(data);
   createRightSections(paginatedData);
   initializePagination(data, itemsPerPage);
@@ -122,7 +143,6 @@ export function attachFilterListeners() {
 
 export function filterItems() {
   filteredData = applyFilters(originalData);
-  currentPage = 1;
   updateDisplay(filteredData);
 }
 

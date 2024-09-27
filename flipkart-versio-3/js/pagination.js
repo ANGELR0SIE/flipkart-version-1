@@ -6,17 +6,14 @@ let currentData = [];
 
 export function initializePagination(items, itemsPerPage) {
   const paginationContainer = document.querySelector(".pagination");
-  paginationContainer.innerHTML = "";
-
   const totalPages = Math.ceil(items.length / itemsPerPage);
-  
+  paginationContainer.innerHTML = "";
+  currentPage = 1;
   for (let i = 1; i <= totalPages; i++) {
     const pageButton = document.createElement("button");
     pageButton.textContent = i;
     pageButton.className = "page-button";
-    if (i === currentPage) {
-      pageButton.classList.add('active'); 
-    }
+    
     pageButton.onclick = () => {
       currentPage = i;
       paginateItems(i, items, itemsPerPage);
@@ -32,6 +29,8 @@ function paginateItems(pageNumber, items, itemsPerPage) {
   const endIndex = startIndex + itemsPerPage;
   const itemsToDisplay = items.slice(startIndex, endIndex);
   updateDisplay(itemsToDisplay);
+  updateActivePageButton(pageNumber);
+  togglePaginationButtons(itemsToDisplay.length > 0);
 }
 
 function updateDisplay(items) {
@@ -67,3 +66,17 @@ async function loadData() {
   }
 }
 
+function updateActivePageButton(pageNumber) {
+  const pageButtons = document.querySelectorAll(".page-button");
+  pageButtons.forEach((button, index) => {
+    button.classList.remove("active"); 
+    if (index + 1 === pageNumber) {
+      button.classList.add("active");
+    }
+  });
+}
+
+function togglePaginationButtons(shouldDisplay) {
+  const paginationContainer = document.querySelector(".pagination");
+  paginationContainer.style.display = shouldDisplay ? "flex" : "none";
+}
