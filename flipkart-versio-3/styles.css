@@ -8,7 +8,7 @@
     margin: 0;
     padding: 0;
   }
-  
+
   a,
   img,
   input,
@@ -103,6 +103,11 @@
     margin-right: -2px;
     /* margin-right: 2px; */
   }
+  .checkbox-item img
+  {
+   height: 21px;
+  }
+
   
   .header-logo .link img {
     width: 10px;

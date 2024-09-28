@@ -65,7 +65,7 @@ export function createRightSections(items) {
     const heartDiv = document.createElement("div");
     heartDiv.className = "heart";
     const heartImg = document.createElement("img");
-    heartImg.src = "";
+    heartImg.src =item.heart;
     heartDiv.appendChild(heartImg);
 
     const date = document.createElement("div");
@@ -89,7 +89,7 @@ export function createRightSections(items) {
     const ratingSpan = document.createElement("span");
     ratingSpan.innerHTML = item.ratings;
     const ratingImg = document.createElement("img");
-    ratingImg.src = "";
+    ratingImg.src = item.ratingStar;
     ratingBtn.append(ratingSpan, ratingImg);
 
     const reviewsDiv = document.createElement("div");

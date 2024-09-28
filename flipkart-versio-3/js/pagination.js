@@ -1,8 +1,8 @@
-import { createRightSections } from "./pone-cards.js";
-import { attachSortListeners } from "./sorting.js"; 
+import { createRightSections } from "./phone-cards.js";
+import { attachSortListeners } from "./sorting.js";
 
 let currentPage = 1;
-let currentData = []; 
+let currentData = [];
 
 export function initializePagination(items, itemsPerPage) {
   const paginationContainer = document.querySelector(".pagination");
@@ -13,7 +13,7 @@ export function initializePagination(items, itemsPerPage) {
     const pageButton = document.createElement("button");
     pageButton.textContent = i;
     pageButton.className = "page-button";
-    
+
     pageButton.onclick = () => {
       currentPage = i;
       paginateItems(i, items, itemsPerPage);
@@ -21,7 +21,7 @@ export function initializePagination(items, itemsPerPage) {
     paginationContainer.appendChild(pageButton);
   }
 
-  paginateItems(currentPage, items, itemsPerPage); 
+  paginateItems(currentPage, items, itemsPerPage);
 }
 
 function paginateItems(pageNumber, items, itemsPerPage) {
@@ -41,7 +41,7 @@ function updateDisplay(items) {
   }
 
   rightSectionsMain.innerHTML = "";
-  createRightSections(items); 
+  createRightSections(items);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -58,9 +58,8 @@ async function loadData() {
     }
 
     currentData = data.rightSections;
-    initializePagination(currentData, 5); 
-    attachSortListeners(currentData, 5); 
-
+    initializePagination(currentData, 5);
+    attachSortListeners(currentData, 5);
   } catch (error) {
     console.error("Error loading data:", error);
   }
@@ -69,7 +68,7 @@ async function loadData() {
 function updateActivePageButton(pageNumber) {
   const pageButtons = document.querySelectorAll(".page-button");
   pageButtons.forEach((button, index) => {
-    button.classList.remove("active"); 
+    button.classList.remove("active");
     if (index + 1 === pageNumber) {
       button.classList.add("active");
     }

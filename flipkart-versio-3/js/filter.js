@@ -1,4 +1,4 @@
-import { createRightSections } from "./pone-cards.js";
+import { createRightSections } from "./phone-cards.js";
 import { initializePagination } from "./pagination.js";
 
 let originalData = [];
@@ -22,7 +22,6 @@ async function loadData() {
   }
 }
 
-
 const ramConditions = {
   "4 GB": (ram) => ram === 4,
   "3 GB": (ram) => ram === 3,
@@ -38,19 +37,18 @@ function applyFilters(data) {
   const ramFilters = getSelectedRAM();
   const ratings = getSelectedRatings();
 
-
   return data.filter((item) => {
     const brandMatch = brandFilters.length
       ? brandFilters.includes(item.name.split(" ")[0].toUpperCase())
       : true;
     const ramMatch = ramFilters.length
-    ? ramFilters.some((filter) => {
-        if (item.RAM === "Not Specified") return false;
+      ? ramFilters.some((filter) => {
+          if (item.RAM === "Not Specified") return false;
 
-        const itemRAM = parseInt(item.RAM); 
-        return ramConditions[filter] ? ramConditions[filter](itemRAM) : false;
-      })
-    : true;
+          const itemRAM = parseInt(item.RAM);
+          return ramConditions[filter] ? ramConditions[filter](itemRAM) : false;
+        })
+      : true;
     const ratingMatch = ratings.length
       ? ratings.some((rating) => parseFloat(item.ratings) >= parseFloat(rating))
       : true;
@@ -94,7 +92,7 @@ function getSelectedRAM() {
 function updateDisplay(data) {
   const rightSection = document.querySelector(".right-sec");
   const paginationContainer = document.querySelector(".pagination");
-  
+
   if (data.length === 0) {
     rightSection.innerHTML = "<div>No results found</div>";
     paginationContainer.style.display = "none";
@@ -102,10 +100,10 @@ function updateDisplay(data) {
   } else {
     paginationContainer.style.display = "block";
   }
-  
+
   currentPage = 1;
   console.log(currentPage);
-  
+
   const paginatedData = paginate(data);
   createRightSections(paginatedData);
   initializePagination(data, itemsPerPage);

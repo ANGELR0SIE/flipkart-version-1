@@ -17,10 +17,10 @@
         "seller": "Become a Seller",
         "more": {
           "text": "More",
-          "icon": "assets/down-arrow-nav.svg"
+          "icon": "assets/down-arrow.svg"
         },
         "cart": {
-          "icon": "cart-icon.svg",
+          "icon": "assets/cart.svg",
           "text": "Cart"
         }
       }
