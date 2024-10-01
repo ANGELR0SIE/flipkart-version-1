@@ -1,7 +1,4 @@
-@font-face {
-  font-family: Inter Regular;
-  src: url(https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/fonts/Inter-Regular.woff2);
-}
+/* basic styles */
 
 * {
     box-sizing: border-box;
@@ -28,11 +25,15 @@
     background-color: #f1f3f6;
     font-family: Inter Regular;
   }
+
   span,
   p,
   h2 {
     line-height: normal;
   }
+
+  /* fonts  */
+
   @font-face {
     font-family: inter-italics;
     src: url(fonts/Inter-Italic.woff2);
@@ -49,15 +50,31 @@
     font-family: inter-semi-bold;
     src: url(fonts/Inter-SemiBold.woff2);
   }
+
+  /* setting variables  */
+
+  :root {
+    --blue: #2874f0;
+    --white: #ffffff;
+  }
+  
+
+
   .wht-bg {
-    background-color: #fff;
+    background-color: var(--white);
   }
   .clr-bl {
-    color: #2874f0;
+    color:var(--blue);
   }
   .bg-bl {
-    background-color: #2874f0;
+    background-color:var(--blue);
   }
+
+
+
+  /* header-section  */
+
+
   .nav-bar {
     position: fixed;
     display: flex;
@@ -290,6 +307,10 @@
     width: 4.7px;
     height: 8px;
   }
+
+/* body section  */
+
+
   .body-section {
     margin: 0 auto;
     min-width: 978px;
@@ -300,50 +321,19 @@
     display: flex;
     flex-direction: row-reverse;
   }
-  .left {
-    flex: 0 0 280px;
-    max-width: 280px;
-    padding: 0px 10px 0px 0px;
-    flex-direction: column;
-    display: flex;
-    width: 16.66%;
-    height: 100%;
+
+  .left-sidebar {
+      /* flex: 0 0 280px; */
+      max-width: 280px;
+      flex-direction: column;
+      display: flex;
+      width: 16.66%;
+      height: 100%;
+      background-color: #fff;   
+      width: 270px;
   }
-  .top-left {
-    background: #fff;
-    box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.06);
-  }
-  .filter-hd {
-    padding: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #f0f0f0;
-    display: flex;
-    /* align-items: center; */
-    justify-content: center;
-    flex-direction: column;
-  }
-  .filter-hd span {
-    font-size: 18px;
-    font-family: inter-semi-bold;
-    letter-spacing: -0.2px;
-    line-height: 25.2px;
-    font-weight: 0;
-  }
-  .filter-list-hidden {
-    display: flex;
-    gap: 2px;
-    flex-wrap: wrap;
-  }
-  .filter-list-hidden div {
-    display: flex;
-    gap: 2px;
-    background-color: gainsboro;
-    width: fit-content;
-    border-radius: 4px;
-  }
-  .filter-list-hidden div:hover {
-    text-decoration-line: line-through;
-  }
+
+
   .categories {
     padding: 16px;
     border-bottom: 1px solid #f0f0f0;
@@ -384,6 +374,9 @@
     line-height: 19.6px;
   }
   
+
+
+
   /* :rightsections */
   
   .right {
@@ -392,11 +385,13 @@
     flex-direction: column;
     display: flex;
   }
+
   .rightHead {
     display: flex;
     width: 100%;
     flex-direction: column;
     background-color: #ffff;
+    padding: 12px 16px 0;
     border-bottom: 1px solid #f0f0f0;
   }
   
@@ -430,9 +425,10 @@
   .results span {
     font-family: inter-semi-bold, nimbus;
     font-weight: 500;
-    font-size: 15.3px;
+    font-size: 15px;
     /* line-height: 18px; */
     line-height: 22.4px;
+    letter-spacing: 0.1;
   }
   
   .filter-bar {
@@ -482,16 +478,7 @@
     width: 80%;
   }
 
-  .left-sidebar{
-    flex: 0 0 280px;
-    max-width: 280px;
-    padding: 0px 10px 0px 0px;
-    flex-direction: column;
-    display: flex;
-    width: 16.66%;
-    height: 100%;
-    background-color: #fff;
-  }
+
   
   .row{
     gap:50px;
@@ -587,9 +574,14 @@
   
   .row-left {
     /* width: 58.33%; */
-    width: 62%;
+    /* width: 62%; */
+    width: 100%;
     display: inline-block;
     font-family: font4;
+  }
+
+  .right-sec-div{
+    width: 100%;
   }
   
   .row-left h2 {
@@ -784,9 +776,9 @@
   .pagination {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
     align-items: center;
     width: 100%;
+    background: var(--white);
   }
   
   .pagination button {
@@ -796,7 +788,7 @@
   }
   
   .pagination button.active {
-    background-color: #007bff;
+    background-color: var(--blue);
     color: white;
   }
   
@@ -909,7 +901,6 @@ section{
 .section-title{
   padding: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #f0f0f0;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -922,6 +913,21 @@ section{
   cursor: pointer;
 }
 
+.filter-header{
+  padding: 16px;
+  padding-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.filter-header h2{
+font-size: 18px;
+}
+
+.filter-section{
+  padding: 16px;
+}
 
 .section-title {
   font-size: 13px;
@@ -947,7 +953,12 @@ section{
   line-height: 1px;
 }
 
+.page-button{
+  border: none;
+ background-color: transparent;
+}
 
-.page-button:active{
+.page-button.active{
   background-color: #172337;
+  border-radius: 60px;
 }

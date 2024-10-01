@@ -1,6 +1,8 @@
 import { filterItems } from "./filter.js";
 import { handleSort } from "./sorting.js";
 import { initializePagination } from "./pagination.js";
+import { createPriceRangeSection } from './price-filter.js';
+
 
 document.addEventListener("DOMContentLoaded", () => {
   let phoneData = [];
@@ -57,8 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
       headerLogo.appendChild(logoLink);
       const searchBar = document.createElement("div");
       searchBar.className = "header-search-bar";
+      const searchbarInner = document.createElement("div");
+      searchbarInner.className = "search-inner";
       const searchBg = document.createElement("div");
-      searchBg.className = "search-bg wht-bg";
+      searchBg.className = "search-bg";
       const searchInput = document.createElement("input");
       searchInput.className = "search-input";
       searchInput.type = "text";
@@ -70,7 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
       searchImg.appendChild(searchIcon);
       searchBg.appendChild(searchInput);
       searchBg.appendChild(searchImg);
-      searchBar.appendChild(searchBg);
+      searchbarInner.appendChild(searchBg);
+      searchBar.appendChild(searchbarInner);
       const login = document.createElement("div");
       login.className = "login";
       const loginLink = document.createElement("a");
@@ -127,133 +132,149 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function createLeftSidebar() {
-    const leftSidebar = document.createElement("div");
-    leftSidebar.className = "left-sidebar";
-    const bodySection = document.querySelector(".body-section");
-    const categoriesData = flipkartData.leftSidebar[0].categories;
-    const filterHeader = document.createElement("div");
-    filterHeader.className = "filter-header";
-    const filterHeaderText = document.createElement("h2");
-    filterHeaderText.innerText = categoriesData.head;
-    filterHeader.appendChild(filterHeaderText);
-    const removeItemsDivHeader = document.createElement("div");
-    removeItemsDivHeader.className = "remove-items sec2-remove-items";
-    removeItemsDivHeader.style.display = "none";
-    const clearIconHeader = document.createElement("span");
-    clearIconHeader.className = "icon";
-    clearIconHeader.innerText = "✕";
-    const clearTextHeader = document.createElement("span");
-    clearTextHeader.className = "text";
-    clearTextHeader.innerText = "Clear all";
-    const listOfFilters = document.createElement("div");
-    listOfFilters.className = "list-of-filter";
-    removeItemsDivHeader.appendChild(clearIconHeader);
-    removeItemsDivHeader.appendChild(clearTextHeader);
-    filterHeader.appendChild(removeItemsDivHeader);
-    leftSidebar.appendChild(filterHeader);
-    flipkartData.leftSidebar[0].sections.forEach((section, index) => {
-      const sectionDiv = document.createElement("section");
-      sectionDiv.className = `filter-section ${section.title
-        .replace(/\s+/g, "-")
-        .toLowerCase()}`;
-      const sectionTitle = document.createElement("div");
-      sectionTitle.className = "section-title";
-      sectionTitle.innerText = section.title;
-      sectionDiv.appendChild(sectionTitle);
-      const removeItemsDiv = document.createElement("div");
-      removeItemsDiv.className = `remove-items ${
-        section.title.replace(/\s+/g, "-").toLowerCase() + "-remove-items"
-      }`;
-      removeItemsDiv.style.display = "none";
-      const clearIcon = document.createElement("span");
-      clearIcon.className = "icon";
-      clearIcon.innerText = "✕";
-      const clearText = document.createElement("span");
-      clearText.className = "text";
-      clearText.innerText = "Clear all";
-      removeItemsDiv.appendChild(clearIcon);
-      removeItemsDiv.appendChild(clearText);
-      sectionDiv.appendChild(removeItemsDiv);
-      if (section.options) {
-        const checkboxList = document.createElement("ul");
-        section.options.forEach((option) => {
-          const listItem = document.createElement("li");
-          listItem.className = "checkbox-item";
-          const checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
-          checkbox.value = option;
-          const label = document.createElement("label");
-          label.innerText = option;
-          listItem.appendChild(checkbox);
-          listItem.appendChild(label);
-          checkboxList.appendChild(listItem);
-          checkbox.addEventListener("change", () => {
-            const anyChecked = [
-              ...checkboxList.querySelectorAll('input[type="checkbox"]'),
-            ].some((cb) => cb.checked);
-            removeItemsDiv.style.display = anyChecked ? "block" : "none";
-          });
+
+
+
+
+const createLeftSidebar = function () {
+  const leftSidebar = document.querySelector(".left-sidebar");
+  const bodySection = document.querySelector(".body-section");
+
+  const categoriesData = flipkartData.leftSidebar[0].categories;
+  const filterHeaderMain = document.createElement("div");
+  filterHeaderMain.className = "filter-header";
+  const filterHeaderTextMain = document.createElement("h2");
+  filterHeaderTextMain.innerText = categoriesData.head;
+  filterHeaderMain.appendChild(filterHeaderTextMain);
+  
+  const removeItemsDivHeader = document.createElement("div");
+  removeItemsDivHeader.className = "remove-items sec2-remove-items";
+  removeItemsDivHeader.style.display = "none";
+  const clearIconHeader = document.createElement("span");
+  clearIconHeader.className = "icon";
+  clearIconHeader.innerText = "✕";
+  const clearTextHeader = document.createElement("span");
+  clearTextHeader.className = "text";
+  clearTextHeader.innerText = "Clear all";
+  removeItemsDivHeader.appendChild(clearIconHeader);
+  removeItemsDivHeader.appendChild(clearTextHeader);
+  filterHeaderMain.appendChild(removeItemsDivHeader);
+  
+  const selectedFiltersDiv = document.createElement("div");
+  selectedFiltersDiv.className = "selected-filters";
+  filterHeaderMain.appendChild(selectedFiltersDiv);
+  
+  leftSidebar.appendChild(filterHeaderMain);
+
+  const priceFilterSection = createPriceRangeSection();
+  leftSidebar.appendChild(priceFilterSection);
+
+  flipkartData.leftSidebar[0].sections.forEach((section, index) => {
+    if (index === 0) return;
+
+    const sectionDiv = document.createElement("section");
+    sectionDiv.className = `filter-section ${section.title.replace(/\s+/g, "-").toLowerCase()}`;
+    const sectionTitle = document.createElement("div");
+    sectionTitle.className = "section-title";
+    sectionTitle.innerText = section.title;
+    sectionDiv.appendChild(sectionTitle);
+    
+    const removeItemsDiv = document.createElement("div");
+    removeItemsDiv.className = `remove-items ${section.title.replace(/\s+/g, "-").toLowerCase()}-remove-items`;
+    removeItemsDiv.style.display = "none";
+    const clearIcon = document.createElement("span");
+    clearIcon.className = "icon";
+    clearIcon.innerText = "✕";
+    const clearText = document.createElement("span");
+    clearText.className = "text";
+    clearText.innerText = "Clear all";
+    removeItemsDiv.appendChild(clearIcon);
+    removeItemsDiv.appendChild(clearText);
+    sectionDiv.appendChild(removeItemsDiv);
+    
+    if (section.options) {
+      const checkboxList = document.createElement("ul");
+      section.options.forEach((option) => {
+        const listItem = document.createElement("li");
+        listItem.className = "checkbox-item";
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = option;
+        const label = document.createElement("label");
+        label.innerText = option;
+        listItem.appendChild(checkbox);
+        listItem.appendChild(label);
+        checkboxList.appendChild(listItem);
+        
+        checkbox.addEventListener("change", () => {
+          const anyChecked = [...checkboxList.querySelectorAll('input[type="checkbox"]')].some((cb) => cb.checked);
+          removeItemsDiv.style.display = anyChecked ? "block" : "none";
+          updateSelectedFilters(); 
         });
-        sectionDiv.appendChild(checkboxList);
-      }
-      clearIcon.addEventListener("click", () => {
-        const checkboxes = sectionDiv.querySelectorAll(
-          'input[type="checkbox"]'
-        );
-        checkboxes.forEach((cb) => {
-          cb.checked = false;
-          filterItems();
-        });
-        removeItemsDiv.style.display = "none";
       });
-      leftSidebar.appendChild(sectionDiv);
+      sectionDiv.appendChild(checkboxList);
+    }
+    
+    clearIcon.addEventListener("click", () => {
+      const checkboxes = sectionDiv.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach((cb) => {
+        cb.checked = false;
+        filterItems();
+      });
+      removeItemsDiv.style.display = "none";
     });
-    // const fassuredData = flipkartData.leftSidebar[0].fassured;
-    // const fassuredSection = document.createElement("div");
-    // fassuredSection.className = "fassured-section";
-    // const fassuredLogo = document.createElement("img");
-    // fassuredLogo.src = fassuredData.logo;
-    // fassuredSection.appendChild(fassuredLogo);
-    // const questionMark = document.createElement("span");
-    // questionMark.innerText = fassuredData.question;
-    // fassuredSection.appendChild(questionMark);
+    leftSidebar.appendChild(sectionDiv);
+  });
+
+  const fassuredSection = document.createElement("section");
+  fassuredSection.className = "filter-section fassured-section";
+  
+  const fassuredTitle = document.createElement("div");
+  fassuredTitle.className = "section-title";
+  fassuredTitle.innerText = "Fassured";
+  fassuredSection.appendChild(fassuredTitle);
+  
+  const fassuredCheckboxList = document.createElement("ul");
+  const fassuredListItem = document.createElement("li");
+  fassuredListItem.className = "checkbox-item";
+  
+  const fassuredCheckbox = document.createElement("input");
+  fassuredCheckbox.type = "checkbox";
+  fassuredCheckbox.value = "Fassured";
+  
+  const fassuredImage = document.createElement("img");
+  fassuredImage.src = "assets/fassured.png";
+  fassuredImage.alt = "Fassured";
+  
+  const questionMark = document.createElement("span");
+  questionMark.innerText = "?";
+  
+  fassuredListItem.appendChild(fassuredCheckbox);
+  fassuredListItem.appendChild(fassuredImage);
+  fassuredListItem.appendChild(questionMark);
+  fassuredCheckboxList.appendChild(fassuredListItem);
+  fassuredSection.appendChild(fassuredCheckboxList);
+
+  leftSidebar.appendChild(fassuredSection);
+
+  bodySection.appendChild(leftSidebar);
+};
 
 
 
 
-    const fassuredSection = document.createElement("section");
-fassuredSection.className = "filter-section fassured-section";
 
-const fassuredTitle = document.createElement("div");
-fassuredTitle.className = "section-title";
-fassuredTitle.innerText = "Fassured";
-fassuredSection.appendChild(fassuredTitle);
 
-const fassuredCheckboxList = document.createElement("ul");
-const fassuredListItem = document.createElement("li");
-fassuredListItem.className = "checkbox-item";
 
-const fassuredCheckbox = document.createElement("input");
-fassuredCheckbox.type = "checkbox";
-fassuredCheckbox.value = "Fassured";
 
-const fassuredImage = document.createElement("img");
-fassuredImage.src = "assets/fassured.png"; // The image path
-fassuredImage.alt = "Fassured";
 
-const questionMark = document.createElement("span");
-questionMark.innerText = "?";
 
-fassuredListItem.appendChild(fassuredCheckbox);
-fassuredListItem.appendChild(fassuredImage);
-fassuredListItem.appendChild(questionMark); 
-fassuredCheckboxList.appendChild(fassuredListItem);
-fassuredSection.appendChild(fassuredCheckboxList);
 
-    leftSidebar.appendChild(fassuredSection);
-    bodySection.appendChild(leftSidebar);
-  }
+
+
+
+
+
 
   function createRightSidebar() {
     const right = document.querySelector(".right");
